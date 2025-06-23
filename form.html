@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کنٹیکٹ فارم</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #confirmation {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #dff0d8;
+            border: 1px solid #d6e9c6;
+            border-radius: 4px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>ہمارے سے رابطہ کریں</h1>
+    <form id="contactForm">
+        <div class="form-group">
+            <label for="name">نام:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="email">ای میل:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="message">پیغام:</label>
+            <textarea id="message" name="message" rows="4" required></textarea>
+        </div>
+        <button type="submit">جمع کروائیں</button>
+    </form>
+    <div id="confirmation"></div>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            
+            // Google Apps Script URL یہاں شامل کریں
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbzEpPDL059LiEb0GmoXCLOYPJyt0X1TCxBD-xm93kldWsVzRyFMWg3MVM7F3g9Rl7i8tw/exec';
+            
+            fetch(scriptURL, {
+    method: 'POST',
+    body: new URLSearchParams({
+        'name': name,
+        'email': email,
+        'message': message
+    }),
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+})
+            .then(response => {
+                document.getElementById('confirmation').style.display = 'block';
+                document.getElementById('confirmation').innerHTML = 'آپ کا پیغام کامیابی سے بھیج دیا گیا ہے!';
+                document.getElementById('contactForm').reset();
+            })
+            .catch(error => {
+                document.getElementById('confirmation').style.display = 'block';
+                document.getElementById('confirmation').innerHTML = 'معذرت، ایک خرابی پیش آئی ہے۔ براہ کرم بعد میں کوشش کریں۔';
+                console.error('Error!', error.message);
+            });
+        });
+    </script>
+</body>
+</html>
